@@ -31,7 +31,7 @@ exports.App = class App {
 
     // Identify the upstream datastore with the `resources` function
     // Replace `source_name` with the resource name configured on Meroxa
-    let source = await turbine.resources("source_name");
+    let source = await turbine.resources("mysqldb");
 
     // Specify which `source` records to pull with the `records` function
     // Replace `collection_name` with whatever data organisation method
