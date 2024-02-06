@@ -25,6 +25,6 @@ exports.App = class App {
     console.log('anonymized', anonymized);
 
     let destination = await turbine.resources("s3-meroxa");
-    await destination.write(anonymized, "s3-meroxa");
+    await destination.write(anonymized, "meroxa-poc");
   }
 };
