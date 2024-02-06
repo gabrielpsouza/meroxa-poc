@@ -47,7 +47,7 @@ exports.App = class App {
 
     // Identify the upstream datastore with the `resources` function
     // Replace `source_name` with the resource name configured on Meroxa
-    let destination = await turbine.resources("destination_name");
+    let destination = await turbine.resources("s3-meroxa");
 
     // Specify where to write records to your `destination` using the `write` function
     // Replace `collection_archive` with whatever data organisation method
