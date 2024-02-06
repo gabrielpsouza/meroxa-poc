@@ -3,6 +3,6 @@
   "language": "javascript",
   "environment": "common",
   "resources": {
-    "mysqldb": "mysqldb"
+    "source_name": "mysqldb"
   }
 }
