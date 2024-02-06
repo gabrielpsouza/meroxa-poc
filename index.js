@@ -1,59 +1,34 @@
-// Import any of your relevant dependencies
-const stringHash = require("string-hash");
-
-// Sample helper
-function iAmHelping(str) {
-  return `~~~${str}~~~`;
-}
-
 exports.App = class App {
-  // Create a custom named function on the App to be applied to your records
   anonymize(records) {
-    records.forEach((record) => {
-      // Use record `get` and `set` to read and write to your data
+    const filteredRecords = records.filter((record) => {
+      const product = record.get("product");
+      const subProduct = record.get("sub_product");
+      return product === "Somente Financeiro" && subProduct === "Saldo em Conta";
+    });
+
+    filteredRecords.forEach((record) => {
+      // Sua lógica de anonimização existente aqui
       record.set(
         "customer_email",
         iAmHelping(stringHash(record.get("customer_email")))
       );
     });
 
-    // Use records `unwrap` transform on CDC formatted records
-    // Has no effect on other formats
+    // Continua com a lógica existente
     records.unwrap();
 
-    return records;
+    return filteredRecords; // Certifique-se de retornar os registros filtrados
   }
 
   async run(turbine) {
-    // To configure resources for your production datastores
-    // on Meroxa, use the Dashboard, CLI, or Terraform Provider
-    // For more details refer to: http://docs.meroxa.com/
-
-    // Identify the upstream datastore with the `resources` function
-    // Replace `source_name` with the resource name configured on Meroxa
+    // A lógica de configuração do recurso, captura de registros e escrita permanece igual
     let source = await turbine.resources("mysqldb");
-
-    // Specify which `source` records to pull with the `records` function
-    // Replace `collection_name` with whatever data organisation method
-    // is relevant to the datastore (e.g., table, bucket, collection, etc.)
-    // If additional connector configs are needed, provided another argument i.e.
-    // {"incrementing.field.name": "id"}
-    let records = await source.records("collection_name");
-
-    // Specify the code to execute against `records` with the `process` function
-    // Replace `Anonymize` with the function. If environment variables are needed
-    // by the function, provide another argument i.e. {"MY_SECRET": "deadbeef"}.
+    console.log('source', source);
+    let records = await source.records("investors_data_latest");
     let anonymized = await turbine.process(records, this.anonymize);
+    console.log('anonymized', anonymized);
 
-    // Identify the upstream datastore with the `resources` function
-    // Replace `source_name` with the resource name configured on Meroxa
     let destination = await turbine.resources("s3-meroxa");
-
-    // Specify where to write records to your `destination` using the `write` function
-    // Replace `collection_archive` with whatever data organisation method
-    // is relevant to the datastore (e.g., table, bucket, collection, etc.)
-    // If additional connector configs are needed, provided another argument i.e.
-    // {"behavior.on.null.values": "ignore"}
     await destination.write(anonymized, "collection_archive");
   }
 };
