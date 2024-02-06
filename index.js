@@ -6,22 +6,18 @@ exports.App = class App {
       return product === "Somente Financeiro" && subProduct === "Saldo em Conta";
     });
 
-    filteredRecords.forEach((record) => {
-      // Sua lógica de anonimização existente aqui
+    filteredRecords.forEach((record) => {      
       record.set(
         "customer_email",
         iAmHelping(stringHash(record.get("customer_email")))
       );
     });
-
-    // Continua com a lógica existente
     records.unwrap();
 
-    return filteredRecords; // Certifique-se de retornar os registros filtrados
+    return filteredRecords; 
   }
 
   async run(turbine) {
-    // A lógica de configuração do recurso, captura de registros e escrita permanece igual
     let source = await turbine.resources("mysqldb");
     console.log('source', source);
     let records = await source.records("investors_data_latest");
@@ -29,6 +25,6 @@ exports.App = class App {
     console.log('anonymized', anonymized);
 
     let destination = await turbine.resources("s3-meroxa");
-    await destination.write(anonymized, "collection_archive");
+    await destination.write(anonymized, "s3-meroxa");
   }
 };
