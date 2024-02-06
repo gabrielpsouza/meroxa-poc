@@ -1,0 +1,8 @@
+{
+  "name": "meroxa-poc",
+  "language": "javascript",
+  "environment": "common",
+  "resources": {
+    "source_name": "fixtures/demo-cdc.json"
+  }
+}
