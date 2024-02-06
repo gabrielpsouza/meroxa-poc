@@ -4,6 +4,6 @@
   "environment": "common",
   "resources": {
     "mysqldb": "mysqldb",
-    "destination_name": "mysqldb"
+    "destination_name": "s3-meroxa"
   }
 }
