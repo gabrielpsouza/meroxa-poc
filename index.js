@@ -25,36 +25,17 @@ exports.App = class App {
   }
 
   async run(turbine) {
-    // To configure resources for your production datastores
-    // on Meroxa, use the Dashboard, CLI, or Terraform Provider
-    // For more details refer to: http://docs.meroxa.com/
-
-    // Identify the upstream datastore with the `resources` function
-    // Replace `source_name` with the resource name configured on Meroxa
     let source = await turbine.resources("mysqldb");
 
-    // Specify which `source` records to pull with the `records` function
-    // Replace `collection_name` with whatever data organisation method
-    // is relevant to the datastore (e.g., table, bucket, collection, etc.)
-    // If additional connector configs are needed, provided another argument i.e.
-    // {"incrementing.field.name": "id"}
     let records = await source.records("investors_portfolio_daily_data_latest");
 
-    // Specify the code to execute against `records` with the `process` function
-    // Replace `Anonymize` with the function. If environment variables are needed
-    // by the function, provide another argument i.e. {"MY_SECRET": "deadbeef"}.
     let anonymized = await turbine.process(records, this.anonymize);
 
-    // Identify the upstream datastore with the `resources` function
-    // Replace `source_name` with the resource name configured on Meroxa
     let destination = await turbine.resources("s3-meroxa");
 
-    // Specify where to write records to your `destination` using the `write` function
-    // Replace `collection_archive` with whatever data organisation method
-    // is relevant to the datastore (e.g., table, bucket, collection, etc.)
-    // If additional connector configs are needed, provided another argument i.e.
-    // {"behavior.on.null.values": "ignore"}
-    await destination.write(anonymized, "meroxa-poc");
+    await destination.write(anonymized, "meroxa-poc",  {
+      "data.from.investors_portfolio_daily_data_latest": "{{topic}}-{{partition}}-{{start_offset}}-{{timestamp:unit=yyyy}}{{timestamp:unit=MM}}{{timestamp:unit=dd}}{{timestamp:unit=HH}}.gz"
+    });
     console.log('chegou no final');
   }
 };
