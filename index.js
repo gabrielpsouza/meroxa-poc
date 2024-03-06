@@ -14,13 +14,16 @@ exports.App = class App {
   }
 
   async run(turbine) {
-    let source = await turbine.resources("mysqldb");
+    let source = await turbine.resources("mysqldb-test-nlb");
 
     let records = await source.records("investors_portfolio_daily_data_latest");
 
     let anonymized = await turbine.process(records, this.anonymize);
 
     let destination = await turbine.resources("s3-meroxa");
+    
+    aws.access.key.id = 
+    aws.secret.access.key
 
     await destination.write(anonymized, "meroxa-poc",  {
       "data.from.investors_portfolio_daily_data_latest": "{{topic}}-{{partition}}-{{start_offset}}-{{timestamp:unit=yyyy}}{{timestamp:unit=MM}}{{timestamp:unit=dd}}{{timestamp:unit=HH}}.gz"
