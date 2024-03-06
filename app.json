@@ -3,7 +3,7 @@
   "language": "javascript",
   "environment": "common",
   "resources": {
-    "mysqldb": "mysqldb",
+    "mysqldb-test-nlb": "mysqldb-test-nlb",
     "s3-meroxa": "s3-meroxa"
   }
 }
