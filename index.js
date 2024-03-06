@@ -21,9 +21,6 @@ exports.App = class App {
     let anonymized = await turbine.process(records, this.anonymize);
 
     let destination = await turbine.resources("s3-meroxa");
-    
-    aws.access.key.id = 
-    aws.secret.access.key
 
     await destination.write(anonymized, "meroxa-poc",  {
       "data.from.investors_portfolio_daily_data_latest": "{{topic}}-{{partition}}-{{start_offset}}-{{timestamp:unit=yyyy}}{{timestamp:unit=MM}}{{timestamp:unit=dd}}{{timestamp:unit=HH}}.gz"
