@@ -1,13 +1,6 @@
 exports.App = class App {
-  anonymize(records) {
-    const filteredRecords = records.filter((record) => {
-      const product = record.get("product");
-      const subProduct = record.get("sub_product");
-      return product === "Somente Financeiro" && subProduct === "Saldo em Conta";
-    });
-
-    // Use records `unwrap` transform on CDC formatted records
-    // Has no effect on other formats
+  anonymize(records) {   
+    console.log('RECORDS REGISTER', records)
     records.unwrap();
 
     return records;
